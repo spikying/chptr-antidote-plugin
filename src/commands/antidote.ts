@@ -1,15 +1,11 @@
-// import { flags } from '@oclif/command'
 import { exec } from 'child_process'
 import { ChapterId } from 'chptr/src/chapter-id'
 import { ChptrError } from 'chptr/src/chptr-error'
-// import  * as flags  from 'chptr/node_modules/@oclif/parser/lib/flags'
 import { d } from 'chptr/src/commands/base'
 import { default as Command } from 'chptr/src/commands/initialized-base'
-// import 'chptr/src/ui-utils'
 import { QueryBuilder } from 'chptr/src/ui-utils'
 import { cli } from 'cli-ux'
 import * as path from 'path'
-// import { ChapterId,ChptrError,QueryBuilder,d } from 'chptr'
 
 const debug = d('antidote')
 
