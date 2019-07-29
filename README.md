@@ -16,27 +16,27 @@ An extension to Chptr to enable a smooth workflow with Antidote, a language-chec
 <!-- usage -->
 ```sh-session
 $ npm install -g chptr-antidote-plugin
-$ oclif-example COMMAND
+$ chptr COMMAND
 running command...
-$ oclif-example (-v|--version|version)
+$ chptr (-v|--version|version)
 chptr-antidote-plugin/0.0.0 win32-x64 node-v10.15.1
-$ oclif-example --help [COMMAND]
+$ chptr --help [COMMAND]
 USAGE
-  $ oclif-example COMMAND
+  $ chptr COMMAND
 ...
 ```
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`oclif-example antidote [CHAPTERID]`](#oclif-example-antidote-chapterid)
+* [`chptr antidote [CHAPTERID]`](#chptr-antidote-chapterid)
 
-## `oclif-example antidote [CHAPTERID]`
+## `chptr antidote [CHAPTERID]`
 
 Launch Antidote spell-checker for given chapter
 
 ```
 USAGE
-  $ oclif-example antidote [CHAPTERID]
+  $ chptr antidote [CHAPTERID]
 
 ARGUMENTS
   CHAPTERID  Chapter number to Antidote.
