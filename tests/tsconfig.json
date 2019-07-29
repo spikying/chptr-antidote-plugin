@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "references": [{ "path": { "..": "..", "chptr/*": "../chptr" } }]
+  "references": [{ "path": { "..": "..", "chptr/*": "../../chptr" } }]
 }
