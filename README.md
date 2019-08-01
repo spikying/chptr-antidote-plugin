@@ -1,7 +1,7 @@
 chptr-antidote-plugin
 =====================
 
-An extension to Chptr to enable a smooth workflow with Antidote, a language-checker software.
+An extension to [Chptr](https://github.com/spikying/chptr) to enable a smooth workflow with Antidote, a language-checker software.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/chptr-antidote-plugin.svg)](https://npmjs.org/package/chptr-antidote-plugin)
@@ -42,9 +42,11 @@ ARGUMENTS
   CHAPTERID  Chapter number to Antidote.
 
 OPTIONS
-  -N, --notify     show a notification box when build is completed.
-  -h, --help       show CLI help
-  -p, --path=path  [default: .] Path where root of project files are
+  -N, --notify           show a notification box when build is completed.
+  -h, --help             show CLI help
+  -m, --message=message  Message to use in commit step (`cancel` to skip commit)
+  -o, --only=|pre|post   Only do the pre-antidote or the post-antidote script
+  -p, --path=path        [default: .] Path where root of project files are
 ```
 
 _See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.0.0/src\commands\antidote.ts)_
