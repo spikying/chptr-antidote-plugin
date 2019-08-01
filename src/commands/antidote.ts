@@ -1,3 +1,4 @@
+import { flags } from '@oclif/command'
 import { exec } from 'child_process'
 import { ChapterId } from 'chptr/src/chapter-id'
 import { ChptrError } from 'chptr/src/chptr-error'
@@ -13,7 +14,18 @@ export default class Antidote extends Command {
   static description = 'Launch Antidote spell-checker for given chapter'
 
   static flags: any = {
-    ...Command.flags
+    ...Command.flags,
+    only: flags.string({
+      char: 'o',
+      description: 'Only do the pre-antidote or the post-antidote script',
+      default: '',
+      options: ['', 'pre', 'post']
+    }),
+    message: flags.string({
+      char: 'm',
+      description: 'Message to use in commit step (`cancel` to skip commit)',
+      default: ''
+    })
   }
 
   static args = [
@@ -28,7 +40,8 @@ export default class Antidote extends Command {
   static hidden = false
 
   async run() {
-    const { args } = this.parse(Antidote)
+    const { args, flags } = this.parse(Antidote)
+    const only = flags.only
 
     let chapterIdString: string = args.chapterId
     if (chapterIdString === '') {
@@ -50,29 +63,43 @@ export default class Antidote extends Command {
     const basicFilePath = path.join(this.rootPath, chapterFileName)
     const antidoteFilePath = this.hardConfig.antidotePathName(chapterFileName)
 
-    cli.action.start(`Launching Antidote with ${antidoteFilePath}`.actionStartColor())
-    await this.fsUtils.copyFile(basicFilePath, antidoteFilePath)
-    await this.processPreAntidote(antidoteFilePath)
+    if (!only || only === 'pre') {
+      cli.action.start(`Launching Antidote with ${antidoteFilePath}`.actionStartColor())
+      await this.fsUtils.copyFile(basicFilePath, antidoteFilePath)
+      await this.processPreAntidote(antidoteFilePath)
 
-    const filePath = `"${path.resolve(antidoteFilePath)}"`
+      const filePath = `"${path.resolve(antidoteFilePath)}"`
 
-    void this.runAntidote([filePath])
+      void this.runAntidote([filePath])
 
-    cli.action.stop('done'.actionStopColor())
-    await cli.anykey('Press any key when Antidote correction is done to continue.'.resultHighlighColor())
+      cli.action.stop('done'.actionStopColor())
+    }
+    if (!only) {
+      await cli.anykey('Press any key when Antidote correction is done to continue.'.resultHighlighColor())
+    }
 
-    await this.processPostAntidote(antidoteFilePath)
+    if (!only || only === 'post') {
+      cli.action.start(`Post-processing ${antidoteFilePath} back to ${basicFilePath}`.actionStartColor())
+      await this.processPostAntidote(antidoteFilePath)
+      await this.fsUtils.moveFile(antidoteFilePath, basicFilePath)
+      cli.action.stop('done'.actionStopColor())
 
-    const queryBuilder2 = new QueryBuilder()
-    queryBuilder2.add('message', queryBuilder2.textinput('Message to use in commit to repository? Type `cancel` to skip commit step.', ''))
-    const queryResponses2: any = await queryBuilder2.responses()
-    const message = ('Antidote:\n' + queryResponses2.message).replace(/"/, '`')
+      let message = flags.message
+      if (!message) {
+        const queryBuilder2 = new QueryBuilder()
+        queryBuilder2.add(
+          'message',
+          queryBuilder2.textinput('Message to use in commit to repository? Type `cancel` to skip commit step.', '')
+        )
+        const queryResponses2: any = await queryBuilder2.responses()
+        message = queryResponses2.message
+      }
 
-    await this.fsUtils.moveFile(antidoteFilePath, basicFilePath)
-
-    if (queryResponses2.message !== 'cancel') {
-      const toStageFiles = await this.gitUtils.GetGitListOfStageableFiles(chapterId)
-      await this.coreUtils.preProcessAndCommitFiles(message, toStageFiles)
+      if (message !== 'cancel') {
+        message = ('Antidote:\n' + message).replace(/"/, '`')
+        const toStageFiles = await this.gitUtils.GetGitListOfStageableFiles(chapterId)
+        await this.coreUtils.preProcessAndCommitFiles(message, toStageFiles)
+      }
     }
   }
 
@@ -109,6 +136,9 @@ export default class Antidote extends Command {
 
   private async processPostAntidote(filepath: string): Promise<void> {
     const initialContent = await this.fsUtils.readFileContent(filepath)
+    if (initialContent === '') {
+      throw new ChptrError('File does not exist or is empty', 'antidote:processPostAntidote', 60)
+    }
 
     let replacedContent = this.removeTripleEnters(
       ('\n' + initialContent) // enter at the beginning
