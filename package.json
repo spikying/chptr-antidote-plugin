@@ -60,9 +60,8 @@
   "repository": "git@github.com:spikying/chptr-antidote-plugin.git",
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "posttest": "echo tslint -p test -t stylish",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "echo nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "prepack": "tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "echo NO TEST",
     "version": "oclif-dev readme && git add README.md"
   }
 }
