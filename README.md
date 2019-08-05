@@ -19,7 +19,7 @@ $ npm install -g chptr-antidote-plugin
 $ chptr COMMAND
 running command...
 $ chptr (-v|--version|version)
-chptr-antidote-plugin/0.1.0 win32-x64 node-v10.15.1
+chptr-antidote-plugin/0.1.1 win32-x64 node-v10.15.1
 $ chptr --help [COMMAND]
 USAGE
   $ chptr COMMAND
@@ -49,5 +49,5 @@ OPTIONS
   -p, --path=path        [default: .] Path where root of project files are
 ```
 
-_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.1.0/src\commands\antidote.ts)_
+_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.1.1/src\commands\antidote.ts)_
 <!-- commandsstop -->
