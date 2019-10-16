@@ -19,7 +19,7 @@ $ npm install -g chptr-antidote-plugin
 $ chptr COMMAND
 running command...
 $ chptr (-v|--version|version)
-chptr-antidote-plugin/0.1.1 win32-x64 node-v10.15.1
+chptr-antidote-plugin/0.1.2 win32-x64 node-v10.15.1
 $ chptr --help [COMMAND]
 USAGE
   $ chptr COMMAND
@@ -42,12 +42,12 @@ ARGUMENTS
   CHAPTERID  Chapter number to Antidote.
 
 OPTIONS
-  -N, --notify           show a notification box when build is completed.
+  -N, --notify           show a notification box when command is completed.
   -h, --help             show CLI help
   -m, --message=message  Message to use in commit step (`cancel` to skip commit)
   -o, --only=|pre|post   Only do the pre-antidote or the post-antidote script
   -p, --path=path        [default: .] Path where root of project files are
 ```
 
-_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.1.1/src\commands\antidote.ts)_
+_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.1.2/src\commands\antidote.ts)_
 <!-- commandsstop -->
