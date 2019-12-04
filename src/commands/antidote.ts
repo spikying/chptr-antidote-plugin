@@ -40,6 +40,7 @@ export default class Antidote extends Command {
   static hidden = false
 
   async run() {
+    debug('Running Antidote plugin')
     const { args, flags } = this.parse(Antidote)
     const only = flags.only
 
