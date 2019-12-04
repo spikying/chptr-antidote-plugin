@@ -1,7 +1,7 @@
 {
   "name": "chptr-antidote-plugin",
   "description": "An extension to Chptr to enable a smooth workflow with Antidote, a language-checker software.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Mathieu Leblanc",
     "email": "spiky.ing@gmail.com",
