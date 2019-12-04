@@ -12,7 +12,7 @@
     "@oclif/command": "1.5.18",
     "@oclif/config": "1.13.2",
     "child_process": "1.0.2",
-    "chptr": "0.1.12",
+    "chptr": "0.1.13",
     "cli-ux": "5.3.1",
     "tslib": "1.10.0",
     "tslint-config-prettier": "1.18.0"
