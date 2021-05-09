@@ -30,6 +30,12 @@ export default class Antidote extends Command {
       default: false,
       exclusive: ['only']
     }),
+    delete: flags.boolean({
+      char: 'd',
+      description: 'Delete Word file after process is done',
+      default: false,
+      dependsOn: ['word']
+    }),
     message: flags.string({
       char: 'm',
       description: 'Message to use in commit step (`cancel` to skip commit)',
@@ -53,6 +59,7 @@ export default class Antidote extends Command {
     const { args, flags } = this.parse(Antidote)
     const only = flags.only
     const word = flags.word
+    const deleteWord = flags.delete
 
     let chapterIdString: string = args.chapterId
     if (chapterIdString === '') {
@@ -96,9 +103,15 @@ export default class Antidote extends Command {
 
       cli.action.stop('done'.actionStopColor())
 
-      cli.action.start(`Launching Word for file ${wordFilePath}`)
-      void this.runWord(wordFilePath)
+      cli.action.start(`Running Word for file ${wordFilePath}`)
+      await this.runWord(wordFilePath)
       cli.action.stop('done'.actionStopColor())
+      
+      if (deleteWord) {
+        cli.action.start(`Deleting file ${wordFilePath}`)
+        await this.fsUtils.deleteFile(wordFilePath)
+        cli.action.stop('done'.actionStopColor())
+      }
     } else {
       const antidoteFilePath = this.hardConfig.antidotePathName(chapterFileName)
 
