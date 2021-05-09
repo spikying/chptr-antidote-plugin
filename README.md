@@ -19,7 +19,7 @@ $ npm install -g chptr-antidote-plugin
 $ chptr COMMAND
 running command...
 $ chptr (-v|--version|version)
-chptr-antidote-plugin/0.1.3 win32-x64 node-v12.18.3
+chptr-antidote-plugin/0.2.0 win32-x64 node-v12.18.3
 $ chptr --help [COMMAND]
 USAGE
   $ chptr COMMAND
@@ -47,7 +47,8 @@ OPTIONS
   -m, --message=message  Message to use in commit step (`cancel` to skip commit)
   -o, --only=|pre|post   Only do the pre-antidote or the post-antidote script
   -p, --path=path        [default: .] Path where root of project files are
+  -w, --word             Extract chapter and open in Word (one-way)
 ```
 
-_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.1.3/src\commands\antidote.ts)_
+_See code: [src\commands\antidote.ts](https://github.com/spikying/chptr-antidote-plugin/blob/v0.2.0/src\commands\antidote.ts)_
 <!-- commandsstop -->
