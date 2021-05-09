@@ -4,9 +4,11 @@ import { ChapterId } from 'chptr/lib/chapter-id'
 import { ChptrError } from 'chptr/lib/chptr-error'
 import { d } from 'chptr/lib/commands/base'
 import Command from 'chptr/lib/commands/initialized-base'
+import { BuildType } from 'chptr/lib/core-utils'
 import { QueryBuilder } from 'chptr/lib/ui-utils'
 import { cli } from 'cli-ux'
 import * as path from 'path'
+import { file as tmpFile } from 'tmp-promise'
 
 const debug = d('antidote')
 
@@ -19,7 +21,14 @@ export default class Antidote extends Command {
       char: 'o',
       description: 'Only do the pre-antidote or the post-antidote script',
       default: '',
-      options: ['', 'pre', 'post']
+      options: ['', 'pre', 'post'],
+      exclusive: ['word']
+    }),
+    word: flags.boolean({
+      char: 'w',
+      description: 'Extract chapter and open in Word (one-way)',
+      default: false,
+      exclusive: ['only']
     }),
     message: flags.string({
       char: 'm',
@@ -43,6 +52,7 @@ export default class Antidote extends Command {
     debug('Running Antidote plugin')
     const { args, flags } = this.parse(Antidote)
     const only = flags.only
+    const word = flags.word
 
     let chapterIdString: string = args.chapterId
     if (chapterIdString === '') {
@@ -53,53 +63,82 @@ export default class Antidote extends Command {
     }
     const chapterId = new ChapterId(this.softConfig.extractNumber(chapterIdString), this.softConfig.isAtNumbering(chapterIdString))
 
-    const chapterFileName = (await this.fsUtils.listFiles(
-      path.join(this.rootPath, this.softConfig.chapterWildcardWithNumber(chapterId))
-    ))[0]
+    const chapterFileName = (
+      await this.fsUtils.listFiles(path.join(this.rootPath, this.softConfig.chapterWildcardWithNumber(chapterId)))
+    )[0]
 
     if (!chapterFileName) {
       throw new ChptrError(`No chapter was found with id ${chapterIdString}`, 'antidote:run', 2)
     }
 
     const basicFilePath = path.join(this.rootPath, chapterFileName)
-    const antidoteFilePath = this.hardConfig.antidotePathName(chapterFileName)
 
-    if (!only || only === 'pre') {
-      cli.action.start(`Launching Antidote with ${antidoteFilePath}`.actionStartColor())
-      await this.fsUtils.copyFile(basicFilePath, antidoteFilePath)
-      await this.processPreAntidote(antidoteFilePath)
+    if (word) {
+      cli.action.start(`Building Word output for chapter ${chapterId.toString()}`.actionStartColor())
 
-      const filePath = `"${path.resolve(antidoteFilePath)}"`
+      const chapterContent = await this.fsUtils.readFileContent(basicFilePath)
+      const formattedContent = this.markupUtils.transformToPreProdMarkupContent(chapterContent)
 
-      void this.runAntidote([filePath])
+      const tmpMDfile = await tmpFile()
+      await this.fsUtils.writeInFile(tmpMDfile.fd, formattedContent)
+      let chapterFile = tmpMDfile.path
+
+      const wordFilePath = path.join(this.softConfig.buildDirectory, `${chapterFileName}.antidote.docx`)
+
+      const allLuaFilters = await this.fsUtils.listFiles(path.join(this.hardConfig.configPath, '*.all.lua'))
+      const prodLuaFilters = await this.fsUtils.listFiles(path.join(this.hardConfig.configPath, '*.prod.lua'))
+      allLuaFilters.push(...prodLuaFilters)
+
+      debug(`chapterFile = ${JSON.stringify(chapterFile)}`)
+      const pandocArgs = await this.coreUtils.generatePandocArgs('docx', allLuaFilters, tmpMDfile.path, '', true, wordFilePath)
+      debug(`pandocArgs = ${JSON.stringify(pandocArgs)}`)
+      await this.coreUtils.runPandoc(pandocArgs)
 
       cli.action.stop('done'.actionStopColor())
-    }
-    if (!only) {
-      await cli.anykey('Press any key when Antidote correction is done to continue.'.resultHighlighColor())
-    }
 
-    if (!only || only === 'post') {
-      cli.action.start(`Post-processing ${antidoteFilePath} back to ${basicFilePath}`.actionStartColor())
-      await this.processPostAntidote(antidoteFilePath)
-      await this.fsUtils.moveFile(antidoteFilePath, basicFilePath)
+      cli.action.start(`Launching Word for file ${wordFilePath}`)
+      void this.runWord(wordFilePath)
       cli.action.stop('done'.actionStopColor())
+    } else {
+      const antidoteFilePath = this.hardConfig.antidotePathName(chapterFileName)
 
-      let message = flags.message
-      if (!message) {
-        const queryBuilder2 = new QueryBuilder()
-        queryBuilder2.add(
-          'message',
-          queryBuilder2.textinput('Message to use in commit to repository? Type `cancel` to skip commit step.', '')
-        )
-        const queryResponses2: any = await queryBuilder2.responses()
-        message = queryResponses2.message
+      if (!only || only === 'pre') {
+        cli.action.start(`Launching Antidote with ${antidoteFilePath}`.actionStartColor())
+        await this.fsUtils.copyFile(basicFilePath, antidoteFilePath)
+        await this.processPreAntidote(antidoteFilePath)
+
+        const filePath = `"${path.resolve(antidoteFilePath)}"`
+
+        void this.runAntidote([filePath])
+
+        cli.action.stop('done'.actionStopColor())
+      }
+      if (!only) {
+        await cli.anykey('Press any key when Antidote correction is done to continue.'.resultHighlighColor())
       }
 
-      if (message !== 'cancel') {
-        message = ('Antidote:\n' + message).replace(/"/, '`')
-        const toStageFiles = await this.gitUtils.GetGitListOfStageableFiles(chapterId)
-        await this.coreUtils.preProcessAndCommitFiles(message, toStageFiles)
+      if (!only || only === 'post') {
+        cli.action.start(`Post-processing ${antidoteFilePath} back to ${basicFilePath}`.actionStartColor())
+        await this.processPostAntidote(antidoteFilePath)
+        await this.fsUtils.moveFile(antidoteFilePath, basicFilePath)
+        cli.action.stop('done'.actionStopColor())
+
+        let message = flags.message
+        if (!message) {
+          const queryBuilder2 = new QueryBuilder()
+          queryBuilder2.add(
+            'message',
+            queryBuilder2.textinput('Message to use in commit to repository? Type `cancel` to skip commit step.', '')
+          )
+          const queryResponses2: any = await queryBuilder2.responses()
+          message = queryResponses2.message
+        }
+
+        if (message !== 'cancel') {
+          message = ('Antidote:\n' + message).replace(/"/, '`')
+          const toStageFiles = await this.gitUtils.GetGitListOfStageableFiles(chapterId)
+          await this.coreUtils.preProcessAndCommitFiles(message, toStageFiles)
+        }
       }
     }
   }
@@ -116,6 +155,26 @@ export default class Antidote extends Command {
         }
         if (perr) {
           this.error(perr.toString().errorColor())
+          reject(perr)
+        }
+        if (pout) {
+          this.log(pout)
+        }
+        resolve()
+      })
+    })
+  }
+
+  private async runWord(filepath: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const command = `"c:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\winword.exe" /t "${filepath}"`
+      debug(`Executing child process with command ${command} `)
+
+      exec(command, (err, pout, perr) => {
+        if (err) {
+          reject(err)
+        }
+        if (perr) {
           reject(perr)
         }
         if (pout) {
