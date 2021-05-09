@@ -627,8 +627,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/chptr/lib/core-utils.d.ts": {
-        "version": "0409290d7ecae6a530bb7964fff632401b6a12332ff237dd3691c05979cda52e",
-        "signature": "0409290d7ecae6a530bb7964fff632401b6a12332ff237dd3691c05979cda52e",
+        "version": "990989e3b0d9c024927c3c560b1798194f9080e18cf3bfe5a4bb15a2d6f61953",
+        "signature": "990989e3b0d9c024927c3c560b1798194f9080e18cf3bfe5a4bb15a2d6f61953",
         "affectsGlobalScope": false
       },
       "./node_modules/moment/ts3.1-typings/moment.d.ts": {
@@ -667,8 +667,8 @@
         "affectsGlobalScope": false
       },
       "./node_modules/chptr/lib/markup-utils.d.ts": {
-        "version": "c1fe81c94d8f9bbea64d09e584e7cddd83f90d1674ce8cc8e4cdcb4ebffe035f",
-        "signature": "c1fe81c94d8f9bbea64d09e584e7cddd83f90d1674ce8cc8e4cdcb4ebffe035f",
+        "version": "9332837e2670943af3e436b012969fe03a8942709ae16e55a93e5f1c285569ec",
+        "signature": "9332837e2670943af3e436b012969fe03a8942709ae16e55a93e5f1c285569ec",
         "affectsGlobalScope": false
       },
       "./node_modules/chptr/lib/statistics.d.ts": {
@@ -766,9 +766,19 @@
         "signature": "879932caaf4a58faf2519a504639b6ace1cf9145505341731cc01e9282e32c1f",
         "affectsGlobalScope": false
       },
+      "./node_modules/@types/tmp/index.d.ts": {
+        "version": "98cb15e5c29e948704f8db5ff3777ce5a2c1bb0bc5cf4cabe9250760e9fedec1",
+        "signature": "98cb15e5c29e948704f8db5ff3777ce5a2c1bb0bc5cf4cabe9250760e9fedec1",
+        "affectsGlobalScope": false
+      },
+      "./node_modules/tmp-promise/index.d.ts": {
+        "version": "4b478359655eaa1a3d29ea40e5f5b645e89bfc886002dc93989299d80abb9701",
+        "signature": "4b478359655eaa1a3d29ea40e5f5b645e89bfc886002dc93989299d80abb9701",
+        "affectsGlobalScope": false
+      },
       "./src/commands/antidote.ts": {
-        "version": "138fab2c3496c875e2419b993c668ee01f8598cb9793774ff288c2f072921082",
-        "signature": "af1a58994c7ae5914f574a1019f301a82c31dc48ca79e4d392d6a4ab4a57310e",
+        "version": "187bf664228f4233b6c2383006a04d9d02481c60b0cfe00b428a1b3d084d70df",
+        "signature": "9e62a9f13ec3dc2ea1978b0df3f086ed9c0d62f1e71ad28577cea1a6a4ecdfb2",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/chai/index.d.ts": {
@@ -1364,11 +1374,6 @@
       "./node_modules/@types/sinon/ts3.1/index.d.ts": {
         "version": "5fea7154f7cc1d8b1e56b2c8917cf57b529799201f75871b3d8df13de45123b8",
         "signature": "5fea7154f7cc1d8b1e56b2c8917cf57b529799201f75871b3d8df13de45123b8",
-        "affectsGlobalScope": false
-      },
-      "./node_modules/@types/tmp/index.d.ts": {
-        "version": "98cb15e5c29e948704f8db5ff3777ce5a2c1bb0bc5cf4cabe9250760e9fedec1",
-        "signature": "98cb15e5c29e948704f8db5ff3777ce5a2c1bb0bc5cf4cabe9250760e9fedec1",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/uuid/interfaces.d.ts": {
@@ -3983,6 +3988,15 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/simple-git/src/lib/tasks/log.d.ts"
       ],
+      "./node_modules/tmp-promise/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/tmp/index.d.ts"
+      ],
       "./node_modules/tslib/tslib.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/process.d.ts",
@@ -4261,8 +4275,10 @@
         "./node_modules/chptr/lib/chptr-error.d.ts",
         "./node_modules/chptr/lib/commands/base.d.ts",
         "./node_modules/chptr/lib/commands/initialized-base.d.ts",
+        "./node_modules/chptr/lib/core-utils.d.ts",
         "./node_modules/chptr/lib/ui-utils.d.ts",
-        "./node_modules/cli-ux/lib/index.d.ts"
+        "./node_modules/cli-ux/lib/index.d.ts",
+        "./node_modules/tmp-promise/index.d.ts"
       ],
       "./src/imports.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
@@ -6861,6 +6877,15 @@
         "./node_modules/@types/node/util.d.ts",
         "./node_modules/simple-git/src/lib/tasks/log.d.ts"
       ],
+      "./node_modules/tmp-promise/index.d.ts": [
+        "./node_modules/@types/node/fs.d.ts",
+        "./node_modules/@types/node/process.d.ts",
+        "./node_modules/@types/node/ts3.2/fs.d.ts",
+        "./node_modules/@types/node/ts3.2/process.d.ts",
+        "./node_modules/@types/node/ts3.2/util.d.ts",
+        "./node_modules/@types/node/util.d.ts",
+        "./node_modules/@types/tmp/index.d.ts"
+      ],
       "./node_modules/tslib/tslib.d.ts": [
         "./node_modules/@types/node/fs.d.ts",
         "./node_modules/@types/node/process.d.ts",
@@ -7381,6 +7406,7 @@
       "./node_modules/simple-git/src/lib/types/handlers.d.ts",
       "./node_modules/simple-git/src/lib/types/index.d.ts",
       "./node_modules/simple-git/typings/response.d.ts",
+      "./node_modules/tmp-promise/index.d.ts",
       "./node_modules/tslib/tslib.d.ts",
       "./node_modules/typescript/lib/lib.dom.d.ts",
       "./node_modules/typescript/lib/lib.dom.iterable.d.ts",
