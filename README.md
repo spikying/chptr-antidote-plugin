@@ -19,7 +19,7 @@ $ npm install -g chptr-antidote-plugin
 $ chptr COMMAND
 running command...
 $ chptr (-v|--version|version)
-chptr-antidote-plugin/0.1.3 win32-x64 node-v10.15.1
+chptr-antidote-plugin/0.1.3 win32-x64 node-v12.18.3
 $ chptr --help [COMMAND]
 USAGE
   $ chptr COMMAND

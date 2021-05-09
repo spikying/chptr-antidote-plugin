@@ -3,7 +3,7 @@ import { exec } from 'child_process'
 import { ChapterId } from 'chptr/lib/chapter-id'
 import { ChptrError } from 'chptr/lib/chptr-error'
 import { d } from 'chptr/lib/commands/base'
-import { default as Command } from 'chptr/lib/commands/initialized-base'
+import Command from 'chptr/lib/commands/initialized-base'
 import { QueryBuilder } from 'chptr/lib/ui-utils'
 import { cli } from 'cli-ux'
 import * as path from 'path'
@@ -13,7 +13,7 @@ const debug = d('antidote')
 export default class Antidote extends Command {
   static description = 'Launch Antidote spell-checker for given chapter'
 
-  static flags: any = {
+  static flags = {
     ...Command.flags,
     only: flags.string({
       char: 'o',
